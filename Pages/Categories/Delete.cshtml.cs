@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Filip_Andrei_Lab2.Data;
 using Filip_Andrei_Lab2.Models;
 
-namespace Filip_Andrei_Lab2.Pages.Books
+namespace Filip_Andrei_Lab2.Pages.Categories
 {
     public class DeleteModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace Filip_Andrei_Lab2.Pages.Books
         }
 
         [BindProperty]
-        public Book Book { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,27 +29,15 @@ namespace Filip_Andrei_Lab2.Pages.Books
                 return NotFound();
             }
 
-            var bookToUpdate = await _context.Book
-            .Include(i => i.Publisher)
-            .Include(i => i.Author)
-            .Include(i => i.BookCategories)
-            .ThenInclude(i => i.Category)
-            .FirstOrDefaultAsync(s => s.ID == id);
+            var category = await _context.Category.FirstOrDefaultAsync(m => m.ID == id);
 
-            if (bookToUpdate == null)
-            {
-                return NotFound();
-            }
-
-            var book = await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (book == null)
+            if (category == null)
             {
                 return NotFound();
             }
             else
             {
-                Book = book;
+                Category = category;
             }
             return Page();
         }
@@ -61,11 +49,11 @@ namespace Filip_Andrei_Lab2.Pages.Books
                 return NotFound();
             }
 
-            var book = await _context.Book.FindAsync(id);
-            if (book != null)
+            var category = await _context.Category.FindAsync(id);
+            if (category != null)
             {
-                Book = book;
-                _context.Book.Remove(Book);
+                Category = category;
+                _context.Category.Remove(Category);
                 await _context.SaveChangesAsync();
             }
 

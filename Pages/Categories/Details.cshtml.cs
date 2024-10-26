@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Filip_Andrei_Lab2.Data;
 using Filip_Andrei_Lab2.Models;
 
-namespace Filip_Andrei_Lab2.Pages.Books
+namespace Filip_Andrei_Lab2.Pages.Categories
 {
     public class DetailsModel : PageModel
     {
@@ -19,37 +19,23 @@ namespace Filip_Andrei_Lab2.Pages.Books
             _context = context;
         }
 
-        public Book Book { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-
             if (id == null)
             {
                 return NotFound();
             }
-            
-            var bookToUpdate = await _context.Book
-            .Include(i => i.Publisher)
-            .Include(i => i.Author)
-            .Include(i => i.BookCategories)
-            .ThenInclude(i => i.Category)
-            .FirstOrDefaultAsync(s => s.ID == id);
 
-            if (bookToUpdate == null)
-            {
-                return NotFound();
-            }
-            
-            var book = await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
-
-            if (book == null)
+            var category = await _context.Category.FirstOrDefaultAsync(m => m.ID == id);
+            if (category == null)
             {
                 return NotFound();
             }
             else
             {
-                Book = book;
+                Category = category;
             }
             return Page();
         }
