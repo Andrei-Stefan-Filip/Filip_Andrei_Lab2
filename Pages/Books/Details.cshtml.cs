@@ -28,7 +28,18 @@ namespace Filip_Andrei_Lab2.Pages.Books
                 return NotFound();
             }
 
+            var bookToUpdate = await _context.Book
+            .Include(i => i.Publisher)
+            .Include(i => i.Author)
+            .FirstOrDefaultAsync(s => s.ID == id);
+
+            if (bookToUpdate == null)
+            {
+                return NotFound();
+            }
+
             var book = await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
+
             if (book == null)
             {
                 return NotFound();
